@@ -21,23 +21,22 @@ const whatsappClient = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: {
         headless: true,
-        executablePath: '/usr/bin/google-chrome-stable', // Путь к Chrome в контейнере
+        executablePath: undefined, // Пусть Puppeteer использует свой встроенный Chromium
         args: [
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-            '--disable-dev-shm-usage',
-            '--disable-accelerated-2d-canvas',
-            '--no-first-run',
-            '--no-zygote',
-            '--single-process',
-            '--disable-gpu',
-            '--disable-software-rendering',
-            '--disable-features=VizDisplayCompositor',
-            '--disable-features=TranslateUI',
-            '--disable-background-timer-throttling',
-            '--disable-backgrounding-occluded-windows',
-            '--disable-renderer-backgrounding'
-        ]
+    '--no-sandbox',
+    '--disable-setuid-sandbox',
+    '--disable-dev-shm-usage',
+    '--disable-accelerated-2d-canvas',
+    '--no-first-run',
+    '--no-zygote',
+    '--single-process',
+    '--disable-gpu',
+    '--disable-software-rendering',
+    '--disable-features=VizDisplayCompositor',
+    '--disable-features=TranslateUI',
+    '--disable-web-security', // Временно для теста
+    '--allow-running-insecure-content'
+]
     }
 });
 
