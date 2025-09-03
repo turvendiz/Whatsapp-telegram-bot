@@ -78,23 +78,32 @@ whatsappClient.on('disconnected', (reason) => {
         .catch(err => console.error('Ошибка отправки сообщения:', err));
 });
 
-// Получение сообщений WhatsApp
+// Получение сообщений WhatsApp - с отладкой
 whatsappClient.on('message', async message => {
     try {
-        // Игнорируем сообщения от групп и статусов
+        // Игнорируем сообщения от статусов
         if (message.from === 'status@broadcast') return;
         
-        const contact = await message.getContact();
         const chat = await message.getChat();
+        const contact = await message.getContact();
+        
+        // ВРЕМЕННО: Выводим информацию о чате для отладки
+        console.log('=== НОВОЕ СООБЩЕНИЕ ===');
+        console.log('Chat ID:', chat.id._serialized);
+        console.log('Chat Name:', chat.name);
+        console.log('Is Group:', chat.isGroup);
+        console.log('Sender:', contact.pushname || contact.number);
+        console.log('Message:', message.body);
+        console.log('========================');
         
         // Игнорируем сообщения от самого себя
         if (contact.isMe) return;
         
+        // ПОКА ПЕРЕСЫЛАЕМ ВСЕ СООБЩЕНИЯ (временно)
         const senderName = contact.pushname || contact.shortName || contact.number;
         const text = `📱 *WhatsApp* от ${senderName}:\n${message.body || '(медиафайл)'}`;
         
         await telegramBot.sendMessage(TELEGRAM_CHAT_ID, text, { parse_mode: 'Markdown' });
-        console.log('📤 Отправлено в Telegram:', message.body?.substring(0, 50) || '(медиа)');
         
     } catch (error) {
         console.error('❌ Ошибка обработки сообщения:', error);
