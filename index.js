@@ -54,10 +54,7 @@ whatsappClient.on('qr', qr => {
         
     console.log('Или введите код вручную в WhatsApp Web\n');
 });
-    // Отправляем QR в Telegram (в виде текста)
-    telegramBot.sendMessage(TELEGRAM_CHAT_ID, `📱 *Сканируйте QR-код в WhatsApp:*\n\`${qr}\``, { parse_mode: 'Markdown' })
-        .catch(err => console.error('Ошибка отправки QR в Telegram:', err));
-});
+
 
 whatsappClient.on('ready', () => {
     console.log('✅ WhatsApp клиент готов!');
