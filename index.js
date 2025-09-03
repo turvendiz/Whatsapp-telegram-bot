@@ -43,9 +43,17 @@ const whatsappClient = new Client({
 // Обработчики событий WhatsApp
 whatsappClient.on('qr', qr => {
     console.log('\n=== СКАНИРУЙТЕ QR-КОД В WHATSAPP ===');
-    qrcode.generate(qr, { small: true });
-    console.log('Откройте WhatsApp → Настройки → WhatsApp Web → Сканируйте QR-код выше\n');
     
+    // Отображаем QR в консоли
+    qrcode.generate(qr, { small: true });
+    
+    // Отправляем в Telegram как текст (для ручного ввода)
+    const qrText = `📱 *Сканируйте QR-код в WhatsApp или введите вручную:*\n\`\`\`${qr}\`\`\``;
+    telegramBot.sendMessage(TELEGRAM_CHAT_ID, qrText, { parse_mode: 'Markdown' })
+        .catch(err => console.error('Ошибка отправки QR в Telegram:', err));
+        
+    console.log('Или введите код вручную в WhatsApp Web\n');
+});
     // Отправляем QR в Telegram (в виде текста)
     telegramBot.sendMessage(TELEGRAM_CHAT_ID, `📱 *Сканируйте QR-код в WhatsApp:*\n\`${qr}\``, { parse_mode: 'Markdown' })
         .catch(err => console.error('Ошибка отправки QR в Telegram:', err));
